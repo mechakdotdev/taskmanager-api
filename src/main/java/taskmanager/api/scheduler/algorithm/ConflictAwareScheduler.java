@@ -3,6 +3,7 @@ package taskmanager.api.scheduler.algorithm;
 import taskmanager.api.model.Task;
 import taskmanager.api.scheduler.Scheduler;
 import org.springframework.stereotype.Component;
+import taskmanager.api.scheduler.SchedulingAlgorithms;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -48,6 +49,6 @@ public class ConflictAwareScheduler implements Scheduler {
 
     @Override
     public String getName() {
-        return "conflict-aware";
+        return SchedulingAlgorithms.CONFLICT_AWARE;
     }
 }

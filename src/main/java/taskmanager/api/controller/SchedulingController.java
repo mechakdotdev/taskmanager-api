@@ -1,7 +1,7 @@
 package taskmanager.api.controller;
 
 import taskmanager.api.model.Task;
-import taskmanager.api.service.SchedulerService;
+import taskmanager.api.service.scheduler.SchedulerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,8 @@ public class SchedulingController {
 
     @GetMapping
     public ResponseEntity<List<Task>> getScheduledTasks(@RequestParam String algorithm) {
-        List<Task> result = schedulerService.scheduleTasks(algorithm);
+        var result = schedulerService.scheduleTasks(algorithm);
+
         return ResponseEntity.ok(result);
     }
 }

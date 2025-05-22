@@ -1,11 +1,11 @@
-package taskmanager.api.service;
+package taskmanager.api.service.scheduler;
 
 import taskmanager.api.model.Task;
 import taskmanager.api.repository.TaskRepository;
 import taskmanager.api.scheduler.Scheduler;
-import taskmanager.api.scheduler.SchedulerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import taskmanager.api.scheduler.SchedulerResolver;
 
 import java.util.List;
 
@@ -14,14 +14,12 @@ import java.util.List;
 public class SchedulerService {
 
     private final TaskRepository taskRepository;
-    private final SchedulerFactory schedulerFactory;
+    private final SchedulerResolver schedulerResolver;
 
-    public List<Task> scheduleTasks(String algorithmName) {
+    public List<Task> scheduleTasks(String algorithm) {
         List<Task> tasks = taskRepository.findAll();
 
-        Scheduler scheduler = schedulerFactory
-                .getScheduler(algorithmName)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown algorithm: " + algorithmName));
+        Scheduler scheduler = schedulerResolver.resolve(algorithm);
 
         return scheduler.schedule(tasks);
     }

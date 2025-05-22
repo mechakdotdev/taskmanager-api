@@ -2,7 +2,6 @@ package taskmanager.api.scheduler.algorithm;
 
 import taskmanager.api.model.Priority;
 import taskmanager.api.model.Task;
-import taskmanager.api.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +11,11 @@ import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static taskmanager.api.utils.TestHelper.mockTask;
 
 class ConflictAwareSchedulerTests {
 
     private ConflictAwareScheduler scheduler;
-    private User testUser;
     LocalDateTime fixedDateTime = LocalDateTime.of(1990, 1, 1, 0, 0);
     Clock fixedClock = Clock.fixed(fixedDateTime.atZone(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
 
@@ -24,18 +23,17 @@ class ConflictAwareSchedulerTests {
     void setUp() {
 
         scheduler = new ConflictAwareScheduler(fixedClock);
-        testUser = getMockUser();
     }
 
     @Test
     void should_ExcludeTask_When_TaskExceedsTimeCapacity() {
         // Arrange
-        var mockTask1 = buildMockTask("Task 1", Priority.HIGH, 2, 5);
-        var mockTask2 = buildMockTask("Task 2", Priority.MEDIUM, 3, 8);
-        var invalidTask = buildMockTask("Task 3 - Duration too long and deadline outside of allowed time",
+        var mockTask1 = mockTask("Task 1", Priority.HIGH, 2, getMockDeadlineWithFixedDateTime(5));
+        var mockTask2 = mockTask("Task 2", Priority.MEDIUM, 3, getMockDeadlineWithFixedDateTime(8));
+        var invalidTask = mockTask("Task 3 - Duration too long and deadline outside of allowed time",
                 Priority.HIGH,
                 4,
-                6);
+                getMockDeadlineWithFixedDateTime(6));
 
         // Act
         List<Task> scheduledTasks = scheduler.schedule(List.of(mockTask1, mockTask2, invalidTask));
@@ -50,8 +48,8 @@ class ConflictAwareSchedulerTests {
     @Test
     void should_ExcludeTask_When_TaskExceedsUserCapacity() {
         // Arrange
-        var mockTask = buildMockTask("Short Task", Priority.HIGH, 3, 10);
-        var invalidTask = buildMockTask("Task - Too long", Priority.LOW, 4, 12);
+        var mockTask = mockTask("Short Task", Priority.HIGH, 3, getMockDeadlineWithFixedDateTime(10));
+        var invalidTask = mockTask("Task - Too long", Priority.LOW, 4, getMockDeadlineWithFixedDateTime(12));
 
         // Act
         List<Task> scheduledTasks = scheduler.schedule(List.of(mockTask, invalidTask));
@@ -66,7 +64,7 @@ class ConflictAwareSchedulerTests {
     @Test
     void should_ExcludeTask_When_DeadlineExpired() {
         // Arrange
-        var expiredTask = buildMockTask("Expired Task", Priority.HIGH, 1, -1);
+        var expiredTask = mockTask("Expired Task", Priority.HIGH, 1, getMockDeadlineWithFixedDateTime(-1));
 
         // Act
         List<Task> scheduledTasks = scheduler.schedule(List.of(expiredTask));
@@ -75,21 +73,7 @@ class ConflictAwareSchedulerTests {
         assertThat(scheduledTasks).isEmpty();
     }
 
-    private User getMockUser() {
-        return User.builder()
-                .id(1L)
-                .name("mock-user")
-                .capacity(5)
-                .build();
-    }
-
-    private Task buildMockTask(String title, Priority priority, int estimatedDuration, int deadlineOffsetHours) {
-        return Task.builder()
-                .title(title)
-                .priority(priority)
-                .estimatedDuration(estimatedDuration)
-                .deadline(fixedDateTime.plusHours(deadlineOffsetHours))
-                .assignedUser(testUser)
-                .build();
+    private LocalDateTime getMockDeadlineWithFixedDateTime(int deadlineOffsetHours) {
+        return fixedDateTime.plusHours(deadlineOffsetHours);
     }
 }

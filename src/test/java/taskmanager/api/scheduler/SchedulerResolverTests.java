@@ -43,7 +43,7 @@ class SchedulerResolverTests {
                 () -> schedulerResolver.resolve(mockAlgorithmName)
         );
 
-        assertEquals("Unknown algorithm: imaginary-algorithm", exception.getMessage());
+        assertEquals("The scheduling algorithm you requested ('imaginary-algorithm') was not recognised.", exception.getMessage());
     }
 
     @ParameterizedTest
@@ -54,7 +54,7 @@ class SchedulerResolverTests {
         Scheduler resolved = schedulerResolver.resolve(algorithm);
 
         assertEquals(mockScheduler, resolved);
-        verify(schedulerFactory).getScheduler(algorithm);
+        verify(schedulerFactory, times(1)).getScheduler(algorithm);
     }
 
     static Stream<String> allAlgorithmNames() { return getAllAlgorithmNames(); }

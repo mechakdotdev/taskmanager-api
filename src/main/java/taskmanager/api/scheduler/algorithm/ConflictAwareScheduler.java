@@ -3,7 +3,7 @@ package taskmanager.api.scheduler.algorithm;
 import taskmanager.api.model.Task;
 import taskmanager.api.scheduler.Scheduler;
 import org.springframework.stereotype.Component;
-import taskmanager.api.scheduler.SchedulingAlgorithms;
+import taskmanager.api.scheduler.constants.SchedulingAlgorithms;
 
 import java.time.Clock;
 import java.time.LocalDateTime;

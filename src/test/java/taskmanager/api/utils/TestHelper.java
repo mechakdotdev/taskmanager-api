@@ -3,7 +3,7 @@ package taskmanager.api.utils;
 import taskmanager.api.model.Priority;
 import taskmanager.api.model.Task;
 import taskmanager.api.model.User;
-import taskmanager.api.scheduler.SchedulingAlgorithms;
+import taskmanager.api.scheduler.constants.SchedulingAlgorithms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

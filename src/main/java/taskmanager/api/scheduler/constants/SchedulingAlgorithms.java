@@ -1,4 +1,4 @@
-package taskmanager.api.scheduler;
+package taskmanager.api.scheduler.constants;
 
 public class SchedulingAlgorithms {
     public static final String CONFLICT_AWARE = "conflict-aware";

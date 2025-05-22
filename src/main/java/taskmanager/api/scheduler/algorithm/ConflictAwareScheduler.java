@@ -26,25 +26,30 @@ public class ConflictAwareScheduler implements Scheduler {
                 .sorted(Comparator.comparing(Task::getDeadline))
                 .toList();
 
-        List<Task> scheduled = new ArrayList<>();
-        var hoursToCompleteTasks = 0;
+        var scheduledTasks = new ArrayList<Task>();
+        var totalScheduledHours = 0;
         LocalDateTime now = LocalDateTime.now(clock);
 
         for (Task task : sorted) {
-            var taskDeadline = task.getDeadline();
-
-            if (taskDeadline.isBefore(now)) continue;
-
-            int duration = task.getEstimatedDuration();
-            if (hoursToCompleteTasks + duration > task.getAssignedUser().getCapacity()) continue;
-
-            if (now.plusHours(hoursToCompleteTasks + duration).isAfter(taskDeadline)) continue;
-
-            scheduled.add(task);
-            hoursToCompleteTasks += duration;
+            if (canSchedule(task, now, totalScheduledHours)) {
+                scheduledTasks.add(task);
+                totalScheduledHours += task.getEstimatedDuration();
+            }
         }
 
-        return scheduled;
+        return scheduledTasks;
+    }
+
+    private boolean canSchedule(Task task, LocalDateTime now, int hoursScheduled) {
+        LocalDateTime deadline = task.getDeadline();
+        int duration = task.getEstimatedDuration();
+        int userCapacity = task.getAssignedUser().getCapacity();
+
+        boolean isPastDeadline = deadline.isBefore(now);
+        boolean exceedsCapacity = hoursScheduled + duration > userCapacity;
+        boolean exceedsDeadlineWindow = now.plusHours(hoursScheduled + duration).isAfter(deadline);
+
+        return !isPastDeadline && !exceedsCapacity && !exceedsDeadlineWindow;
     }
 
     @Override

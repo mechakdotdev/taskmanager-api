@@ -26,6 +26,6 @@ A modular Spring Boot backend that allows users to create and manage tasks, as w
 ### Scheduling Algorithms
 
 - Conflict Aware (conflict-aware)       - Respects deadline and skips overlapping tasks to avoid conflicts
-- Earliest Deadline First (earliest)    - Sorts by deadline
-- Latest Deadline First (latest)        - Sorts by deadline in reverse order
-- Priority (priority)                   - Sorts by priority (HIGH > MEDIUM > LOW)
+- Earliest Deadline First (earliest-deadline)    - Sorts by deadline
+- Latest Deadline First (latest-deadline)        - Sorts by deadline in reverse order
+- Priority (priority-weighted)                   - Sorts by priority (HIGH > MEDIUM > LOW)

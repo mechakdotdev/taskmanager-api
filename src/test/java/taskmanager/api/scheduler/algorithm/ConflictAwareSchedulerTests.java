@@ -29,6 +29,7 @@ class ConflictAwareSchedulerTests {
 
     @Test
     void should_ExcludeTask_When_TaskExceedsTimeCapacity() {
+        // Arrange
         var mockTask1 = buildMockTask("Task 1", Priority.HIGH, 2, 5);
         var mockTask2 = buildMockTask("Task 2", Priority.MEDIUM, 3, 8);
         var invalidTask = buildMockTask("Task 3 - Duration too long and deadline outside of allowed time",
@@ -36,8 +37,10 @@ class ConflictAwareSchedulerTests {
                 4,
                 6);
 
+        // Act
         List<Task> scheduledTasks = scheduler.schedule(List.of(mockTask1, mockTask2, invalidTask));
 
+        // Assert
         assertThat(scheduledTasks)
                 .hasSize(2)
                 .extracting(Task::getTitle)
@@ -46,11 +49,14 @@ class ConflictAwareSchedulerTests {
 
     @Test
     void should_ExcludeTask_When_TaskExceedsUserCapacity() {
+        // Arrange
         var mockTask = buildMockTask("Short Task", Priority.HIGH, 3, 10);
         var invalidTask = buildMockTask("Task - Too long", Priority.LOW, 4, 12);
 
+        // Act
         List<Task> scheduledTasks = scheduler.schedule(List.of(mockTask, invalidTask));
 
+        // Assert
         assertThat(scheduledTasks)
                 .hasSize(1)
                 .extracting(Task::getTitle)
@@ -59,10 +65,13 @@ class ConflictAwareSchedulerTests {
 
     @Test
     void should_ExcludeTask_When_DeadlineExpired() {
+        // Arrange
         var expiredTask = buildMockTask("Expired Task", Priority.HIGH, 1, -1);
 
+        // Act
         List<Task> scheduledTasks = scheduler.schedule(List.of(expiredTask));
 
+        // Assert
         assertThat(scheduledTasks).isEmpty();
     }
 

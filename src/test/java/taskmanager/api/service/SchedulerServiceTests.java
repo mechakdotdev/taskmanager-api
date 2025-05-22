@@ -55,9 +55,9 @@ class SchedulerServiceTests {
 
         // Assert
         assertEquals(scheduledTasks, result);
-        verify(taskRepository).findAll();
-        verify(schedulerResolver).resolve(algorithm);
-        verify(mockScheduler).schedule(mockTasks);
+        verify(taskRepository, times(1)).findAll();
+        verify(schedulerResolver, times(1)).resolve(algorithm);
+        verify(mockScheduler, times(1)).schedule(mockTasks);
     }
 
     static Stream<String> allAlgorithmNames() { return getAllAlgorithmNames(); }

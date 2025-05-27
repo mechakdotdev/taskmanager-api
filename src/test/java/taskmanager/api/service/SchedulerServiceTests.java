@@ -11,7 +11,6 @@ import taskmanager.api.model.Task;
 import taskmanager.api.repository.TaskRepository;
 import taskmanager.api.scheduler.Scheduler;
 import taskmanager.api.scheduler.SchedulerResolver;
-import taskmanager.api.service.scheduler.SchedulerService;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,6 +18,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static taskmanager.api.utils.TestHelper.getAllAlgorithmNames;
+import static taskmanager.api.utils.TestHelper.mockUser;
 
 @ExtendWith(MockitoExtension.class)
 class SchedulerServiceTests {
@@ -42,7 +42,9 @@ class SchedulerServiceTests {
     @ParameterizedTest
     @MethodSource("allAlgorithmNames")
     void should_ScheduleTasksUsingResolvedScheduler(String algorithm) {
+
         // Arrange
+        var mockUserId = mockUser().getId();
         var mockTasks = List.of(new Task());
         var scheduledTasks = List.of(new Task());
 
@@ -51,7 +53,7 @@ class SchedulerServiceTests {
         when(mockScheduler.schedule(mockTasks)).thenReturn(scheduledTasks);
 
         // Act
-        var result = schedulerService.scheduleTasks(algorithm);
+        var result = schedulerService.schedule(algorithm, mockUserId);
 
         // Assert
         assertEquals(scheduledTasks, result);

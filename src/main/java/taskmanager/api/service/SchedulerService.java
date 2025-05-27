@@ -1,4 +1,4 @@
-package taskmanager.api.service.scheduler;
+package taskmanager.api.service;
 
 import taskmanager.api.model.Task;
 import taskmanager.api.repository.TaskRepository;
@@ -16,11 +16,20 @@ public class SchedulerService {
     private final TaskRepository taskRepository;
     private final SchedulerResolver schedulerResolver;
 
-    public List<Task> scheduleTasks(String algorithm) {
-        List<Task> tasks = taskRepository.findAll();
+    public List<Task> schedule(String algorithm, Long userId) {
+        var tasks = taskRepository.findAll().stream().filter(
+                task -> task.getAssignedUser().getId().equals(userId)).toList();
 
         Scheduler scheduler = schedulerResolver.resolve(algorithm);
 
         return scheduler.schedule(tasks);
+    }
+
+    public List<Task> schedule(String algorithm, List<Long> userIds) {
+        List<Task> tasks = taskRepository.findByAssignedUser_IdIn(userIds);
+
+        Scheduler scheduler = schedulerResolver.resolve(algorithm);
+
+        return scheduler.schedule(tasks, userIds);
     }
 }

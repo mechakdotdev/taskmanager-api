@@ -1,4 +1,4 @@
-package taskmanager.api.scheduler.algorithm;
+package taskmanager.api.scheduler.strategy;
 
 import taskmanager.api.model.Priority;
 import taskmanager.api.model.Task;
@@ -27,6 +27,7 @@ class ConflictAwareSchedulerTests {
 
     @Test
     void should_ExcludeTask_When_TaskExceedsTimeCapacity() {
+
         // Arrange
         var mockTask1 = mockTask("Task 1", Priority.HIGH, 2, getMockDeadlineWithFixedDateTime(5));
         var mockTask2 = mockTask("Task 2", Priority.MEDIUM, 3, getMockDeadlineWithFixedDateTime(8));
@@ -47,6 +48,7 @@ class ConflictAwareSchedulerTests {
 
     @Test
     void should_ExcludeTask_When_TaskExceedsUserCapacity() {
+
         // Arrange
         var mockTask = mockTask("Short Task", Priority.HIGH, 3, getMockDeadlineWithFixedDateTime(10));
         var invalidTask = mockTask("Task - Too long", Priority.LOW, 4, getMockDeadlineWithFixedDateTime(12));
@@ -63,6 +65,7 @@ class ConflictAwareSchedulerTests {
 
     @Test
     void should_ExcludeTask_When_DeadlineExpired() {
+
         // Arrange
         var expiredTask = mockTask("Expired Task", Priority.HIGH, 1, getMockDeadlineWithFixedDateTime(-1));
 

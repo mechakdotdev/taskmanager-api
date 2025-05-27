@@ -12,6 +12,7 @@ public class SchedulerResolver {
     public Scheduler resolve(String algorithm) {
         return schedulerFactory
                 .getScheduler(algorithm)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("The scheduling algorithm you requested ('%s') was not recognised.", algorithm)));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("The '%s' scheduling algorithm you specified was not recognised.", algorithm)));
     }
 }

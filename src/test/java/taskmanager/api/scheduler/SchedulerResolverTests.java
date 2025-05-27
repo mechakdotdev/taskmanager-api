@@ -34,25 +34,33 @@ class SchedulerResolverTests {
 
     @Test
     void should_ThrowException_When_AlgorithmIsNotRecognised() {
+
+        // Arrange
         String mockAlgorithmName = "imaginary-algorithm";
 
+        // Act
         when(schedulerFactory.getScheduler(mockAlgorithmName)).thenReturn(Optional.empty());
 
+        // Assert
         var exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> schedulerResolver.resolve(mockAlgorithmName)
         );
 
-        assertEquals("The scheduling algorithm you requested ('imaginary-algorithm') was not recognised.", exception.getMessage());
+        assertEquals("The 'imaginary-algorithm' scheduling algorithm you specified was not recognised.", exception.getMessage());
     }
 
     @ParameterizedTest
     @MethodSource("allAlgorithmNames")
     void should_ResolveSchedulerForEachKnownAlgorithm(String algorithm) {
+
+        // Arrange
         when(schedulerFactory.getScheduler(algorithm)).thenReturn(Optional.of(mockScheduler));
 
+        // Act
         Scheduler resolved = schedulerResolver.resolve(algorithm);
 
+        // Assert
         assertEquals(mockScheduler, resolved);
         verify(schedulerFactory, times(1)).getScheduler(algorithm);
     }

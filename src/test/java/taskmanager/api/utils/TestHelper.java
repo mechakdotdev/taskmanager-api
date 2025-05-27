@@ -3,7 +3,7 @@ package taskmanager.api.utils;
 import taskmanager.api.model.Priority;
 import taskmanager.api.model.Task;
 import taskmanager.api.model.User;
-import taskmanager.api.scheduler.constants.SchedulingAlgorithms;
+import taskmanager.api.scheduler.algorithm.SchedulingAlgorithms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -17,7 +17,15 @@ public class TestHelper {
                 .priority(priority)
                 .estimatedDuration(estimatedDuration)
                 .deadline(deadline)
-                .assignedUser(mockTestUser())
+                .assignedUser(mockUser())
+                .build();
+    }
+
+    public static User mockUser() {
+        return User.builder()
+                .id(1L)
+                .name("mock-user")
+                .capacity(5)
                 .build();
     }
 
@@ -40,13 +48,5 @@ public class TestHelper {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to access field: " + field.getName(), e);
         }
-    }
-
-    private static User mockTestUser() {
-        return User.builder()
-                .id(1L)
-                .name("mock-user")
-                .capacity(5)
-                .build();
     }
 }

@@ -1,9 +1,9 @@
-package taskmanager.api.scheduler.algorithm;
+package taskmanager.api.scheduler.strategy;
 
 import taskmanager.api.model.Task;
 import taskmanager.api.scheduler.Scheduler;
 import org.springframework.stereotype.Component;
-import taskmanager.api.scheduler.constants.SchedulingAlgorithms;
+import taskmanager.api.scheduler.algorithm.SchedulingAlgorithms;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -18,6 +18,11 @@ public class ConflictAwareScheduler implements Scheduler {
 
     public ConflictAwareScheduler(Clock clock) {
         this.clock = clock;
+    }
+
+    @Override
+    public List<Task> schedule(List<Task> tasks, List<Long> userIds) {
+        throw new UnsupportedOperationException("A GET method with an 'algorithm' parameter is required for the algorithm " + getName());
     }
 
     @Override
@@ -40,6 +45,11 @@ public class ConflictAwareScheduler implements Scheduler {
         return scheduledTasks;
     }
 
+    @Override
+    public String getName() {
+        return SchedulingAlgorithms.CONFLICT_AWARE;
+    }
+
     private boolean canSchedule(Task task, LocalDateTime now, int hoursScheduled) {
         LocalDateTime deadline = task.getDeadline();
         int duration = task.getEstimatedDuration();
@@ -50,10 +60,5 @@ public class ConflictAwareScheduler implements Scheduler {
         boolean exceedsDeadlineWindow = now.plusHours(hoursScheduled + duration).isAfter(deadline);
 
         return !isPastDeadline && !exceedsCapacity && !exceedsDeadlineWindow;
-    }
-
-    @Override
-    public String getName() {
-        return SchedulingAlgorithms.CONFLICT_AWARE;
     }
 }

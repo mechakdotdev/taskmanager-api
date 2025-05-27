@@ -28,3 +28,6 @@ A modular Spring Boot backend that allows users to create and manage tasks, as w
 | Earliest Deadline First (earliest-deadline) 	 | New algorithms can be added with minimal coupling |
 | Latest Deadline First (latest-deadline)       | Sorts by deadline |
 | Priority (priority-weighted)                  | Sorts by priority (HIGH > MEDIUM > LOW)	|
+
+---
+The 'development' branch is set up to initalise mock data in the local database so functionality can be tested locally

@@ -1,0 +1,22 @@
+### GET current user from the mock authentication controller
+GET http://localhost:8080/api/v1/mock-auth/current-user
+
+### GET scheduled tasks > conflict-aware
+GET http://localhost:8080/api/v1/schedule?algorithm=conflict-aware&userId=1
+
+### GET scheduled tasks > earliest-deadline
+GET http://localhost:8080/api/v1/schedule?algorithm=earliest-deadline&userId=1
+
+### GET scheduled tasks > latest-deadline
+GET http://localhost:8080/api/v1/schedule?algorithm=latest-deadline&userId=1
+
+### GET scheduled tasks > priority-weighted
+GET http://localhost:8080/api/v1/schedule?algorithm=priority-weighted&userId=1
+
+### POST get scheduled tasks > round-robin
+POST http://localhost:8080/api/v1/schedule?algorithm=round-robin
+Content-Type: application/json
+
+{
+  "users": [1, 2, 3]
+}
